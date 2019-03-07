@@ -9,13 +9,55 @@ namespace Library.LIB.Model.Model
 {
     public class ServiceAdministrator
     {
-        public static bool RegNewReader(Reader reader)
+        public static int count = 1;
+        public static bool RegNewReader()
         {
             try
             {
                 using (var db = new LiteDatabase(@"Library.db"))
                 {
                     LiteCollection<Reader> readers = db.GetCollection<Reader>("Reader");
+                    Reader reader = new Reader();
+                    reader.Reader_id = count;
+                    count++;
+
+                    Console.WriteLine("Введите имя");
+                    reader.Name = Console.ReadLine();
+
+                    Console.WriteLine("Введите логин");
+                    while (true)
+                    {
+                        reader.Login = Console.ReadLine();
+                        if (readers.FindOne(f => f.Login == reader.Login)==null)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Такой логин уже существует");
+                        }
+                    }
+
+                    Console.WriteLine("Введите пароль");
+                    reader.Password = Console.ReadLine();
+                    
+                    reader.IsBlock = false;
+
+                    Console.WriteLine("Введите адрес");
+                    reader.Address = Console.ReadLine();
+
+                    Console.WriteLine("Введите контакты");
+                    reader.Contact = Console.ReadLine();
+
+                    Console.WriteLine("Введите email");
+                    reader.Email = Console.ReadLine();
+
+                    Console.WriteLine("Введите Issue_tag");
+                    reader.Issue_tag = Console.ReadLine();
+
+                    Console.WriteLine("Введите Issue_tag");
+                    reader.Tags_used = Console.ReadLine();
+
                     readers.Insert(reader);
                 }
                 return true;
@@ -124,12 +166,12 @@ namespace Library.LIB.Model.Model
             }
         }
 
-        public static bool ReaderIsExist(string name)
+        public static bool ReaderIsExist(string login)
         {
             using (var db = new LiteDatabase(@"Library.db"))
             {
                 LiteCollection<Reader> readers = db.GetCollection<Reader>("Reader");
-                Reader reader = readers.FindOne(u => u.Name == name);
+                Reader reader = readers.FindOne(u => u.Login == login);
                 if (reader != null)
                     return true;
                 else return false;
@@ -170,7 +212,7 @@ namespace Library.LIB.Model.Model
                     Book book = new Book();
 
                     Console.WriteLine("Введите номер книги\n");
-                    book.S_no =Convert.ToInt32(Console.ReadLine());
+                    book.S_no = Convert.ToInt32(Console.ReadLine());
 
                     Console.WriteLine("Введите имя книги\n");
                     book.Name = Console.ReadLine();
@@ -182,19 +224,19 @@ namespace Library.LIB.Model.Model
                         Console.WriteLine("Выберите тип книги\n");
 
                         Console.WriteLine("1: {0}\n2: {0}\n3: {0}\n4: {0}\n5: {0}\n6: {0}\n7: {0}\n8: {0}\n9: {0}\n10: {0}\n",
-                            Type.Художественные,
-                            Type.Документальные,
-                            Type.Учебные,
-                            Type.Научные,
-                            Type.Производственно_технические,
-                            Type.Программно_методические,
-                            Type.Справочные,
-                            Type.Агитационно_пропагандистские,
-                            Type.Научно_популярные,
-                            Type.Инструктивные);
-                        
-                        book.Type = (Type)Convert.ToInt32(Console.ReadLine());
-                        if((int)book.Type<1||(int)book.Type>10)
+                            TypeBook.Художественные,
+                            TypeBook.Документальные,
+                            TypeBook.Учебные,
+                            TypeBook.Научные,
+                            TypeBook.Производственно_технические,
+                            TypeBook.Программно_методические,
+                            TypeBook.Справочные,
+                            TypeBook.Агитационно_пропагандистские,
+                            TypeBook.Научно_популярные,
+                            TypeBook.Инструктивные);
+
+                        book.TypeBook = (TypeBook)Convert.ToInt32(Console.ReadLine());
+                        if ((int)book.TypeBook < 1 || (int)book.TypeBook > 10)
                         {
                             break;
                         }
@@ -212,7 +254,7 @@ namespace Library.LIB.Model.Model
                     book.Publish_date = DateTime.Parse(Console.ReadLine());
 
                     Console.WriteLine("Введите издание книги");
-                    book.Edition=Convert.ToInt32(Console.ReadLine());
+                    book.Edition = Convert.ToInt32(Console.ReadLine());
 
                     book.Status = Status.available;
 
@@ -224,12 +266,92 @@ namespace Library.LIB.Model.Model
                 Console.WriteLine(ex.Message);
             }
         }
-
         public static void FindBook()
         {
+            try
+            {
+                using (var db = new LiteDatabase(@"Library.db"))
+                {
+                    LiteCollection<Book> books = db.GetCollection<Book>("Book");
+                    Console.WriteLine("Выберите по какому свойству хотите искать книгу");
+                    while (true)
+                    {
+                        Console.WriteLine("1: Номер\n2: Название\n3: Код\n4: Тип\n5: Имя автора\n6: Дата публикации\n");
+                        int x = 0;
+                        x = Convert.ToInt32(Console.ReadLine());
+                        if (x == 1)
+                        {
+                            Console.WriteLine("Введите номер книги");
+                            x = Convert.ToInt32(Console.ReadLine());
+                            books.FindOne(f => f.S_no == x).PrintInfo();
+                        }
+                        if (x == 2)
+                        {
+                            string name;
+                            Console.WriteLine("Введите название книги");
+                            name = Console.ReadLine();
+                            books.FindOne(f => f.Name == name).PrintInfo();
+                        }
+                        if (x == 3)
+                        {
+                            Console.WriteLine("Введите код книги");
+                            x = Convert.ToInt32(Console.ReadLine());
+                            books.FindOne(f => f.Code == x).PrintInfo();
+                        }
+                        if (x == 4)
+                        {
+                            while (true)
+                            {
+                                Console.WriteLine("Выберите тип книги\n");
 
+                                Console.WriteLine("1: {0}\n2: {0}\n3: {0}\n4: {0}\n5: {0}\n6: {0}\n7: {0}\n8: {0}\n9: {0}\n10: {0}\n",
+                                    TypeBook.Художественные,
+                                    TypeBook.Документальные,
+                                    TypeBook.Учебные,
+                                    TypeBook.Научные,
+                                    TypeBook.Производственно_технические,
+                                    TypeBook.Программно_методические,
+                                    TypeBook.Справочные,
+                                    TypeBook.Агитационно_пропагандистские,
+                                    TypeBook.Научно_популярные,
+                                    TypeBook.Инструктивные);
+
+                                x = Convert.ToInt32(Console.ReadLine());
+
+                                // book.TypeBook = (TypeBook)Convert.ToInt32(Console.ReadLine());
+                                if (x > 0 && x < 11)
+                                {
+                                    foreach (Book book in books.FindAll().Where(w => w.TypeBook == (TypeBook)x))
+                                    {
+                                        book.PrintInfo();
+                                    }
+                                    break;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Выберите один из пунктов");
+                                    Console.ReadKey();
+                                    Console.Clear();
+                                }
+                            }
+                        }
+                        if (x == 5)
+                        {
+                            Console.WriteLine("Введите дату публикации книги\n\tdd:MM:yyyy");
+                            DateTime date = DateTime.Parse(Console.ReadLine());
+                            foreach (Book book in books.FindAll().Where(w => w.Publish_date == date))
+                            {
+                                book.PrintInfo();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
-
 
         public static void GetAllBlockedReaders()
         {
