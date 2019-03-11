@@ -10,10 +10,9 @@ namespace Library.LIB.Model.Model
     {
         public int Issue_no { get; set; }
         public int S_No { get; set; }
-        public string ISDN { get; set; }
         public string Name { get; set; }
         public int Code { get; set; }
-        public int Type { get; set; }
+        public TypeBook TypeBook { get; set; }
         public string Borrow_name{ get; set; }
         public string Author { get; set; }
         public DateTime Issue_date { get; set; }

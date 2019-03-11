@@ -1,4 +1,5 @@
-﻿using ClassLibrary1.Interface;
+﻿using Library.LIB.Interface;
+using Library.LIB.Model.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace Library.LIB.Model
 {
-    public class Administrator : IAdmin
+    public class Administrator : IUser
     {
-        public int Admin_id { get; set; }
-        public string Admin_name { get; set; }
-        public string Admin_password { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Login { get; set; }
+        public string Password { get; set; }
     }
 }

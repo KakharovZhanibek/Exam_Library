@@ -7,8 +7,8 @@
     <ProjectGuid>{C7D0B8C7-5D08-4EA6-8668-19ED4F5FFF95}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClassLibrary1</RootNamespace>
-    <AssemblyName>ClassLibrary1</AssemblyName>
+    <RootNamespace>Library.LIB</RootNamespace>
+    <AssemblyName>Library.LIB</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -44,8 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interface\IAdmin.cs" />
-    <Compile Include="Interface\IReader.cs" />
+    <Compile Include="Interface\IUser.cs" />
     <Compile Include="Model\Administrator.cs" />
     <Compile Include="Model\Book.cs" />
     <Compile Include="Model\Feedback.cs" />

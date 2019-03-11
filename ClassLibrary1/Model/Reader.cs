@@ -1,4 +1,4 @@
-﻿using ClassLibrary1.Interface;
+﻿using Library.LIB.Interface;
 using Library;
 using LiteDB;
 using System;
@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Library.LIB.Model.Model;
 
 namespace Library.LIB.Model
 {
-    public class Reader : IReader
+    public class Reader : IUser
     {
-        public int Reader_id { get; set; }
+        public int Id { get; set ; }
         public string Name { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
@@ -19,36 +20,22 @@ namespace Library.LIB.Model
         public string Address { get; set; }
         public string Contact { get; set; }
         public string Email { get; set; }
-        public string Issue_tag { get; set; }
-        public string Tags_used { get; set; }
+        public Dictionary<Book, DateTime> MyBooks { get; set; } = new Dictionary<Book, DateTime>();
 
-        public void ChangePassword()
+        public void PrintMyBooks()
         {
-            
-            Console.WriteLine("Введите старый пароль");
-            string password=Console.ReadLine();
-            using (var db = new LiteDatabase(@"Library"))
+            if (MyBooks != null)
             {
-                LiteCollection<Reader> readers = db.GetCollection<Reader>("Reader");
-                while (true)
+                foreach (KeyValuePair<Book, DateTime> item in MyBooks)
                 {
-                    if (Password == password)
-                    {
-                        Console.WriteLine("Введите новый пароль");
-                        password = Console.ReadLine();
-                        Password = password;
-                        Console.WriteLine("Пароль успешно изменен");
-                        Console.ReadKey();
-                        Console.Clear();
-                        break;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Вы ввели неправильный пароль");
-                        Console.ReadKey();
-                        Console.Clear();
-                    }
+                    Console.WriteLine("|||");
+                    item.Key.PrintInfo();
+                    Console.WriteLine("\nДата возврата {0}", item.Value);
                 }
+            }
+            else
+            {
+                Console.WriteLine("Вы еще не взяли ни одну книгу");
             }
         }
     }
